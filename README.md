@@ -1,6 +1,6 @@
 # TF-IDF와 Naive Bayes 감정 분석 모델을 활용해 도서 리뷰 기반으로 책에 맞는 음악을 추천하는 Book Sound 프로젝트
 
-# Book Sound 🎶📚
+# Book Sound 🎶📚 [Book-Sound.pdf](https://github.com/user-attachments/files/17746022/Book-Sound.pdf)
 
 ### 프로젝트 개요
 Book Sound는 도서 리뷰 데이터를 활용해 책의 감정을 분석하고, 그 감정에 어울리는 음악을 추천하여 독서 경험을 한층 더 풍부하게 만들어주는 웹 애플리케이션입니다. 텍스트 감정 분석 모델을 통해 책의 감정을 이해하고, 이에 맞는 음악을 자동으로 큐레이션하여 사용자가 **감정 기반 몰입형 독서**를 즐길 수 있도록 돕습니다.
