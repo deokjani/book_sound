@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 책장</title>
+
+    <style>
+        /* 페이지 기본 스타일 설정 */
+        body {
+            background-color: #faf4e1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 50px;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* 제목 스타일 */
+        h1 {
+            margin-bottom: 20px;
+            color: #807C74;
+        }
+
+        /* 책장 그리드 스타일 */
+        .bookshelf {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            width: 80%;
+            max-width: 1000px;
+            justify-items: start;
+        }
+
+        /* 책 아이템 스타일 */
+        .book-item {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 150%;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        /* 책 아이템에 마우스를 올렸을 때 확대 효과 */
+        .book-item:hover {
+            transform: scale(1.05);
+        }
+
+        /* 삭제 버튼 스타일 (초기에는 숨김 처리) */
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+            text-align: center;
+            display: none; /* 초기 상태 숨김 */
+            z-index: 1;
+            opacity: 0.4; /* 반투명 설정 */
+            transition: opacity 0.3s; /* 투명도 변경 애니메이션 */
+        }
+
+        /* 책 아이템에 마우스를 올렸을 때 삭제 버튼 표시 */
+        .book-item:hover .delete-btn {
+            display: block; /* 마우스 호버 시 버튼 표시 */
+        }
+
+        /* 초기화 버튼 스타일 */
+        .clear-bookshelf-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            background-color: #807C74;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+
+        .clear-bookshelf-btn:hover {
+            background-color: #555;
+        }
+
+        /* 메인 페이지로 이동 버튼 스타일 */
+        .home-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            background-image: url('/static/images/home.png');
+            background-size: cover;
+            background-color: transparent;
+            border: none;
+            border-radius: 5px;
+            text-indent: -9999px;
+            overflow: hidden;
+        }
+
+        .home-btn:hover {
+            opacity: 0.8;
+        }
+    </style>
+
+    <script>
+        // 로컬 스토리지에서 저장된 책 정보를 불러와 책장을 채우는 함수
+        function loadBookshelf() {
+            const bookshelf = JSON.parse(localStorage.getItem('bookshelf')) || [];
+            const bookshelfContainer = document.querySelector('.bookshelf');
+            bookshelfContainer.innerHTML = '';
+
+            bookshelf.forEach((book, index) => {
+                const bookItem = document.createElement('div');
+                bookItem.classList.add('book-item');
+                bookItem.style.backgroundImage = `url(${book.cover})`;
+
+                // 책을 클릭하면 해당 페이지로 이동
+                bookItem.onclick = () => goToBookPage(book.title);
+
+                // 삭제 버튼 생성
+                const deleteBtn = document.createElement('button');
+                deleteBtn.classList.add('delete-btn');
+                deleteBtn.innerHTML = 'X';
+                deleteBtn.onclick = (event) => {
+                    event.stopPropagation();  // 책 클릭 이벤트 방지
+                    deleteBook(index);  // 해당 책 삭제
+                };
+
+                bookItem.appendChild(deleteBtn);  // 책 아이템에 삭제 버튼 추가
+                bookshelfContainer.appendChild(bookItem);
+            });
+        }
+
+        // 특정 책 페이지로 이동하는 함수 
+        function goToBookPage(title) {
+            window.location.href = `/replay/${encodeURIComponent(title)}`;
+        }
+
+        // 책장을 초기화하는 함수
+        function clearBookshelf() {
+            if (confirm("정말로 책장을 초기화하시겠습니까?")) {
+                localStorage.removeItem('bookshelf');
+                loadBookshelf();
+                alert("책장이 초기화되었습니다.");
+            }
+        }
+
+        // 개별 책 삭제 함수
+        function deleteBook(index) {
+            const bookshelf = JSON.parse(localStorage.getItem('bookshelf')) || [];
+            bookshelf.splice(index, 1);  // 지정된 인덱스의 책 삭제
+            localStorage.setItem('bookshelf', JSON.stringify(bookshelf));  // 로컬 스토리지에 업데이트
+            loadBookshelf();  // 책장 UI 업데이트
+        }
+
+        // 페이지가 로드될 때 책장을 불러오는 함수 호출
+        window.onload = loadBookshelf;
+    </script>
+</head>
+<body>
+    <!-- 메인 페이지로 이동 버튼 -->
+    <a href="/" class="home-btn">메인 페이지로 돌아가기</a>
+
+    <h1>나의 책장</h1>
+    <div class="bookshelf"></div> <!-- 책장 그리드 -->
+    <button class="clear-bookshelf-btn" onclick="clearBookshelf()">책장 초기화</button>
+</body>
+</html>
