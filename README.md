@@ -1,8 +1,5 @@
 # TF-IDF와 Naive Bayes 감정 분석 모델을 활용해 도서 리뷰 기반으로 책에 맞는 음악을 추천하는 Book Sound 프로젝트
 
-[Book-Sound.pdf](https://github.com/user-attachments/files/17745905/Book-Sound.pdf)
-
-
 # Book Sound 🎶📚
 
 ### 프로젝트 개요
